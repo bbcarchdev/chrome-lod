@@ -1,0 +1,31 @@
+{
+  "manifest_version": 2,
+
+  "name": "RES-check",
+  "description": "Highlight RESable pages.",
+  "version": "1.0",
+
+  "page_action": {
+    "default_icon": {
+      "19": "r-icon.png"
+    }
+  },
+  "background": {
+    "persistent": false,
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [ "jquery.min.js", "jquery-ui.min.js", "turn.js", "codemirror-compressed.js", "jquery.rdfquery.core.min-1.0.js", "contentscript.js" ],
+      "css": [ "turn.css", "codemirror.css", "custom.css" ],
+      "run_at" : "document_idle",
+      "all_frames" : false
+    }
+  ],
+  "web_accessible_resources": [
+    "fold.png"]
+}
