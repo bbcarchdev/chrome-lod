@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "RES-check",
-  "description": "Highlight RESable pages.",
+  "name": "LOD-check",
+  "description": "Checks pages as you browse for the presence of Linked Open Data behind them and reveals the underlying data.",
   "version": "1.0",
   "icons": {
     "16": "package-icon-16.png",
