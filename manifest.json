@@ -4,7 +4,11 @@
   "name": "RES-check",
   "description": "Highlight RESable pages.",
   "version": "1.0",
-
+  "icons": {
+    "16": "package-icon-16.png",
+    "48": "package-icon-48.png",
+    "128": "package-icon-128.png"
+  },    
   "page_action": {
     "default_icon": {
       "19": "r-icon.png"
@@ -20,7 +24,7 @@
         "http://*/*",
         "https://*/*"
       ],
-      "js": [ "jquery.min.js", "jquery-ui.min.js", "turn.js", "codemirror-compressed.js", "jquery.rdfquery.core.min-1.0.js", "contentscript.js" ],
+      "js": [ "jquery.min.js", "jquery-ui.min.js", "turn.js", "codemirror-compressed.js", "jquery.rdfquery.core-1.0.js", "contentscript.js" ],
       "css": [ "turn.css", "codemirror.css", "custom.css" ],
       "run_at" : "document_idle",
       "all_frames" : false
