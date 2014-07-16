@@ -4,6 +4,10 @@
   "name": "LOD-check",
   "description": "Checks pages as you browse for the presence of Linked Open Data behind them and reveals the underlying data.",
   "version": "1.0",
+  "permissions": [
+    "webRequest",
+    "<all_urls>"
+  ],
   "icons": {
     "16": "package-icon-16.png",
     "48": "package-icon-48.png",
@@ -11,11 +15,11 @@
   },    
   "page_action": {
     "default_icon": {
-      "19": "r-icon.png"
+      "19": "package-icon-19.png"
     }
   },
   "background": {
-    "persistent": false,
+    "persistent": true,
     "scripts": ["background.js"]
   },
   "content_scripts": [

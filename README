@@ -1,0 +1,32 @@
+Chrome LOD extension
+====================
+
+An extension for Chrome that looks for the presence of Linked Open
+Data behind the pages you browse and if available, reveals the
+underlying data.
+
+Debugging/Building
+------------------
+
+In Chrome, open the tools/extensions page, ensure that developer mode
+is selected, and click to 'load unpacked extension...'.  Select the
+directory you checked out the chrome-lod source to.  This should
+enable the extension directly.
+
+In order to package the extension for deployment, use the 'pack
+extension' button, which will result in a chrome-lod.crx file and
+associated keyfile.
+
+Rationale
+---------
+
+The extension runs once on each page you visit, looking for <link>
+tags in the page with relationship 'meta' or 'alternate' pointing to a
+URI with media-type application/rdf+xml or text/turtle.  Failing that,
+the extension will attempt to do content negotiation on the current
+URI, asking for application/rdf+xml or text/turtle representation of
+the current resource.
+
+If an RDF representation is available, it will be rendered behind the
+current page and a peel-back animation will reveal the background RDF
+data as the mouse hovers over the top left corner of the page.

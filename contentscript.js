@@ -12,15 +12,32 @@ function peelBackRdf(data, format) {
   });
   $('#turn_wrapper').click(
     function() {
-      $('#turn_fold').hide();
-      $('#turn_wrapper').width('100%').height('100%').off();
-      $('#turn_object').width('100%').height('100%').off();
-      $('#turn_hideme').width('100%').height('100%').off();
+      if ($('#turn_fold').is(':visible')) {
+        $('#turn_fold').hide();
+        $('#turn_wrapper').width('100%').height('100%').off();
+        $('#turn_object').width('100%').height('100%').off();
+        $('#turn_hideme').width('100%').height('100%').off();
+      }/* else {
+        $('#turn_fold').show();
+        $('#turn_wrapper').width('80px').height('80px');
+        $('#turn_object').width('80px').height('80px');
+        $('#turn_hideme').width('85px').height('85px');
+      } */
     }
   );
 }
 
-function checkRdf(data, format) {
+$.typedValue.types['http://www.w3.org/2001/XMLSchema#positiveInteger'] = {
+    regex: /^[1-9][0-9]*$/,
+    strip: true,
+    /** @ignore */
+    value: function (v) {
+      return parseInt(v, 10);
+    }
+  };
+
+
+function checkRdfXmlLicense(data, format) {
   var parser = new DOMParser();
   doc = parser.parseFromString(data, 'text/xml');
   try {
@@ -44,6 +61,45 @@ function checkRdf(data, format) {
   }
 }
 
+function fetchRdf(rdfUrl, failfunc) {
+  $.ajax(rdfUrl, {
+    headers: {
+      Accept: acceptFormats.join(', ')
+    },
+    cache: false,
+    dataType: 'text',
+    error: function(req, textStatus, errorThrown) {
+      failfunc();
+    },
+    success: function(data, textStatus, res) {
+      var ct = res.getResponseHeader('Content-Type');
+      if (ct != null) {
+        var format = null;
+        for (var i = 0; i < acceptFormats.length; i++) {
+          if (ct.slice(0, acceptFormats[i].length) == acceptFormats[i]) {
+            format = acceptFormats[i];
+            break;
+          }
+        }
+        if (format != null) {
+          peelBackRdf(data, format);
+          chrome.runtime.sendMessage({
+            method: 'setLicense',
+            type: format,
+	    check: checkRdfXmlLicense(data, format)
+          }, function(response) {
+	    console.log(response.text);
+          });
+        } else {
+          failfunc();
+        }
+      } else {
+        failfunc();
+      }
+    }
+  });
+}
+
 var res = document.evaluate("//link[(@rel = 'alternate') or (@rel = 'meta')]", document.head, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null)
 
 var rdfUrl = null;
@@ -58,46 +114,20 @@ for (var i=0; i < res.snapshotLength; i++) {
   }
 }
 
-if (rdfUrl == null) { // Try fetching current page as RDF
-  $.ajax(document.URL, {
-    headers: {
-      Accept: acceptFormats.join(', ')
-    },
-    dataType: 'text',
-    success: function(data, textStatus, res) {
-      var ct = res.getResponseHeader('Content-Type');
-      if (ct != null) {
-        var format = null;
-        for (var i = 0; i < acceptFormats.length; i++) {
-          if (ct.slice(0, acceptFormats[i].length) == acceptFormats[i]) {
-            format = acceptFormats[i];
-            break;
-          }
-        }
-        if (format != null) {
-          peelBackRdf(data, format);
-          chrome.runtime.sendMessage({
-            type: format,
-	    check: checkRdf(data, format)
-          }, function(response) {
-	    console.log(response.text);
-          });
-        }
-      }
+if (rdfUrl == null) {
+  // check to see whether we've been redirected here
+  chrome.runtime.sendMessage({
+    method: 'isRedirect',
+    url: document.URL
+  }, function(response) {
+    if (response.redirect) {
+      fetchRdf(response.fromUrl, function() {
+        fetchRdf(document.URL); // if failed to fetch prior page as RDF
+      });
+    } else { // if no redirect, try fetching current page as RDF
+      fetchRdf(document.URL, function() {});
     }
   });
 } else {
-  $.ajax(rdfUrl, {
-    accepts: { text: rdfFormat },
-    dataType: 'text',
-    success: function(data, textStatus, res) {
-      peelBackRdf(data, rdfFormat);
-      chrome.runtime.sendMessage({
-        type: format,
-        check: checkRdf(data, rdfFormat)
-      }, function(response) {
-        console.log(response.text);
-      });
-    }
-  });
+  fetchRdf(rdfUrl, function() {});
 }
