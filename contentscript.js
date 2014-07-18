@@ -66,7 +66,7 @@ function fetchRdf(rdfUrl, failfunc) {
     headers: {
       Accept: acceptFormats.join(', ')
     },
-    cache: false,
+    cache: true,
     dataType: 'text',
     error: function(req, textStatus, errorThrown) {
       failfunc();
