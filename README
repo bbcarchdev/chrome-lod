@@ -30,3 +30,22 @@ the current resource.
 If an RDF representation is available, it will be rendered behind the
 current page and a peel-back animation will reveal the background RDF
 data as the mouse hovers over the top left corner of the page.
+
+Examples
+--------
+
+http://data.nytimes.com/48675831753778135041
+
+http://collection.britishmuseum.org/id/object/EOC3130
+
+http://data.ordnancesurvey.co.uk/datasets/os-linked-data
+
+http://id.loc.gov/vocabulary/organizations/ukmajru.html
+
+http://www.bbc.co.uk/programmes/b03kqfzx
+
+http://alpha.acropolis.org.uk/dc1c141fe5d14dcbb04e907156c62e46#id
+
+http://live.dbpedia.org/page/William_Shakespeare
+
+http://data.europeana.eu/item/92056/BD9D5C6C6B02248F187238E9D7CC09EAF17BEA59

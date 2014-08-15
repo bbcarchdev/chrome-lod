@@ -36,6 +36,15 @@ $.typedValue.types['http://www.w3.org/2001/XMLSchema#positiveInteger'] = {
     }
   };
 
+$.typedValue.types['http://www.w3.org/2001/XMLSchema#nonNegativeInteger'] = {
+    regex: /^(-0)|(\+?[0-9]+)$/,
+    strip: true,
+    /** @ignore */
+    value: function (v) {
+      return parseInt(v, 10);
+    }
+  };
+
 
 function checkRdfXmlLicense(data, format) {
   var parser = new DOMParser();
@@ -64,9 +73,9 @@ function checkRdfXmlLicense(data, format) {
 function fetchRdf(rdfUrl, failfunc) {
   $.ajax(rdfUrl, {
     headers: {
-      Accept: acceptFormats.join(', ')
+      Accept: acceptFormats.join(', '),
+      'Cache-Control': 'no-cache'
     },
-    cache: true,
     dataType: 'text',
     error: function(req, textStatus, errorThrown) {
       failfunc();
@@ -122,7 +131,7 @@ if (rdfUrl == null) {
   }, function(response) {
     if (response.redirect) {
       fetchRdf(response.fromUrl, function() {
-        fetchRdf(document.URL); // if failed to fetch prior page as RDF
+        fetchRdf(document.URL, function() {}); // if failed to fetch prior page as RDF
       });
     } else { // if no redirect, try fetching current page as RDF
       fetchRdf(document.URL, function() {});

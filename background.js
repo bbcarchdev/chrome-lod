@@ -1,6 +1,6 @@
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-    console.log("Message from content: " + request);
+    console.log("Message from content: " + request.method);
     if (request.method == 'setLicense') {
       var messages = {
         'error': 'Error parsing RDF',
@@ -23,9 +23,9 @@ chrome.runtime.onMessage.addListener(
       });
       sendResponse({text: "ok"});
     } else if (request.method == 'isRedirect') {
-      if (request.url == redirectToUrl) {
+      if (request.url == redirectList[redirectList.length - 1]) {
         sendResponse({redirect: true,
-                      fromUrl: redirectFromUrl});
+                      fromUrl: redirectList[0]});
       } else {
         sendResponse({redirect: false});
       }
@@ -33,17 +33,20 @@ chrome.runtime.onMessage.addListener(
   }
 );
 
-redirectToUrl = null;
-redirectFromUrl = null;
+redirectId = null;
+redirectList = [];
 
 chrome.webRequest.onBeforeRedirect.addListener(
   function(details) {
-    if (details.statusCode == 303) {
-      console.log(details.url + " is being redirected to " + details.redirectUrl);
-      redirectToUrl = details.redirectUrl;
-      redirectFromUrl = details.url;
+    if (details.requestId != redirectId) {
+      redirectId = details.requestId;
+      redirectList = [details.url];
+      console.log("redirect start, " + details.url);
     }
-    console.log("redirect");
+    if (details.redirectUrl != null) {
+      console.log("redirect to " + details.redirectUrl);
+      redirectList.push(details.redirectUrl);
+    }
   },
   {urls: ["<all_urls>"]}
 );
