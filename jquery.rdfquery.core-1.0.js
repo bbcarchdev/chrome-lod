@@ -580,10 +580,10 @@
         this.value = d.value(d.strip ? strip(value) : value);
         return this;
       } else {
-        throw {
-          name: 'InvalidValue',
-          message: value + ' is not a valid ' + datatype + ' value'
-        };
+        this.representation = value;
+        this.datatype = datatype;
+        this.value = value;
+        return this;
       }
     }
   };
@@ -810,7 +810,7 @@
   $.typedValue.valid = function (value, datatype) {
     var d = $.typedValue.types[datatype];
     if (d === undefined) {
-      throw "InvalidDatatype: The datatype " + datatype + " can't be recognised";
+      return false;
     } else {
       value = d.strip ? strip(value) : value;
       if (d.regex.test(value)) {

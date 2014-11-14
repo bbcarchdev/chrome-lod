@@ -48,7 +48,7 @@ $.typedValue.types['http://www.w3.org/2001/XMLSchema#nonNegativeInteger'] = {
 
 function checkRdfXmlLicense(data, format) {
   var parser = new DOMParser();
-  doc = parser.parseFromString(data, 'text/xml');
+  var doc = parser.parseFromString(data, 'text/xml');
   try {
     var rdf = $.rdf().load(doc);
     var licenses = rdf
@@ -92,6 +92,7 @@ function fetchRdf(rdfUrl, failfunc) {
         }
         if (format != null) {
           peelBackRdf(data, format);
+          console.log("baseURI: " + data.baseURI);
           chrome.runtime.sendMessage({
             method: 'setLicense',
             type: format,
