@@ -125,19 +125,37 @@ for (var i=0; i < res.snapshotLength; i++) {
 }
 
 if (rdfUrl == null) {
-  // check to see whether we've been redirected here
-  chrome.runtime.sendMessage({
-    method: 'isRedirect',
-    url: document.URL
-  }, function(response) {
-    if (response.redirect) {
-      fetchRdf(response.fromUrl, function() {
-        fetchRdf(document.URL, function() {}); // if failed to fetch prior page as RDF
-      });
-    } else { // if no redirect, try fetching current page as RDF
-      fetchRdf(document.URL, function() {});
-    }
-  });
+  // No link URL, so first check to see whether there's any RDFa in the current document
+  var localdata = $(document.body).rdf();
+  if (localdata.databank.size() > 0) {
+    // Serialize it out as RDF/XML
+    var format = "application/rdf+xml";
+    var dom = localdata.databank.dump({format: format});
+    var serializer = new XMLSerializer();
+    var data = vkbeautify.xml(serializer.serializeToString(dom));
+    peelBackRdf(data, format);
+    chrome.runtime.sendMessage({
+      method: 'setLicense',
+      type: format,
+      check: checkRdfXmlLicense(data, format)
+    }, function(response) {
+      console.log(response.text);
+    });
+  } else {
+    // check to see whether we've been redirected here
+    chrome.runtime.sendMessage({
+      method: 'isRedirect',
+      url: document.URL
+    }, function(response) {
+      if (response.redirect) {
+        fetchRdf(response.fromUrl, function() {
+          fetchRdf(document.URL, function() {}); // if failed to fetch prior page as RDF
+        });
+      } else { // if no redirect, try fetching current page as RDF
+        fetchRdf(document.URL, function() {});
+      }
+    });
+  }
 } else {
   fetchRdf(rdfUrl, function() {});
 }
