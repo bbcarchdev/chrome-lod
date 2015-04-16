@@ -1,3 +1,12 @@
+/* Chrome LOD extension
+ *
+ * Author: Alex Tucker <alex.tucker@bbc.co.uk>
+ *
+ * Copyright (c) 2015 BBC
+ *
+ * Released under the MIT license (LICENSE.txt)
+ */
+
 function peelBackRdf(data, format) {
   $('body').prepend('<div id="target"><textarea id="code"></textarea></div>');
   $('#code').text(data);

@@ -1,6 +1,12 @@
 Chrome LOD extension
 ====================
 
+Author: Alex Tucker <alex.tucker@bbc.co.uk>
+
+Copyright (c) 2015 BBC
+
+Released under the MIT license (LICENSE.txt)
+
 An extension for Chrome that looks for the presence of Linked Open
 Data behind the pages you browse and if available, reveals the
 underlying data.
@@ -69,7 +75,7 @@ http://data.europeana.eu/item/92056/BD9D5C6C6B02248F187238E9D7CC09EAF17BEA59
 Todo
 ----
 
-Parsing Turtle to look for licensing statements.
+Parsing Turtle to look for licensing statements. Move to rdflib.js?
 
 Checking that the license applies to the document URI of the RDF document.
 

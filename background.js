@@ -1,3 +1,12 @@
+/* Chrome LOD extension
+ *
+ * Author: Alex Tucker <alex.tucker@bbc.co.uk>
+ *
+ * Copyright (c) 2015 BBC
+ *
+ * Released under the MIT license (LICENSE.txt)
+ */
+
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     console.log("Message from content: " + request.method);
