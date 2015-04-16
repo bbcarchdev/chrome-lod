@@ -24,20 +24,30 @@ The extension runs once on each page you visit looking for any RDF
 data it can find in the following order:
 
 1) Any <link> tags in the page with relationship 'meta' or 'alternate'
-pointing to a URI with media-type application/rdf+xml or text/turtle.
+pointing to a URI with media-type application/rdf+xml, text/turtle or
+text/n3.
 
-2) Any RDFa in the body of the HTML document.
+2) If the page you're visiting is the result of a redirect, then try
+to GET the previous page using content negotiation asking for an
+application/rdf+xml, text/turtle or text/n3 representation, following
+any further redirects.
 
-3) Using content negotiation on the current URI, asking for
-application/rdf+xml or text/turtle representation of the current
-resource.
+3) Just use content negotiation on the current URI, again asking for
+RDF and following any redirects.
 
 If an RDF representation is available, it will be rendered behind the
 current page and a peel-back animation will reveal the background RDF
 data as the mouse hovers over the top left corner of the page.
 
-Examples
---------
+A limited check will be done to find out whether there is any machine
+readable license about the published RDF document.
+
+Finally, a traffic light is rendered in the right of the omnibox to
+give an indication of conformance of the underlying linked (open)
+data.
+
+Examples to try
+---------------
 
 http://sws.geonames.org/3020251/
 
@@ -49,15 +59,12 @@ http://data.ordnancesurvey.co.uk/datasets/os-linked-data
 
 http://id.loc.gov/vocabulary/organizations/ukmajru.html
 
-http://www.bbc.co.uk/programmes/b03kqfzx
-
-http://alpha.acropolis.org.uk/dc1c141fe5d14dcbb04e907156c62e46#id
+http://beta.acropolis.org.uk/79a5f7dd9c284e1193e94797fbf2f90f
 
 http://live.dbpedia.org/page/William_Shakespeare
 
 http://data.europeana.eu/item/92056/BD9D5C6C6B02248F187238E9D7CC09EAF17BEA59
 
-http://didactalia.net/comunidad/materialeducativo/recurso/La-teoria-de-la-relatividad-en-ingles/eb95e40e-937f-4447-a68d-5f1a3fbc97ff
 
 Todo
 ----
