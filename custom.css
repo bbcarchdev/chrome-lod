@@ -17,6 +17,10 @@
   z-index: 10000;
 }
 
+#turn_object {
+  overflow: visible !important;
+}
+
 .CodeMirror-code pre {
   box-shadow: none;
 }
@@ -29,4 +33,5 @@
 .CodeMirror-scroll {
   overflow-y: hidden;
   overflow-x: auto;
+  height: auto !important;
 }
