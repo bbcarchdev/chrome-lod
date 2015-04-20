@@ -25,7 +25,7 @@ function peelBackRdf(data, format) {
         $('#turn_fold').hide();
         $('#turn_wrapper').width('100%').height('100%').off();
         $('#turn_object').width('100%').height('100%').off();
-        $('#turn_hideme').width('100%').height('100%').off();
+        $('#turn_hideme').width('auto').height('auto').off();
       }/* else {
         $('#turn_fold').show();
         $('#turn_wrapper').width('80px').height('80px');
